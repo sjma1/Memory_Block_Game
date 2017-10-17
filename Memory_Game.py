@@ -35,8 +35,9 @@ SHAPES  = {RING, SQUARE, DIAMOND, X_SHAPE, CIRCLE}
 
 class Memory_Game:
     def __init__(self):
-
+        self.group_size = 8
         self.main_board = None
+        self.revealed = None
         self.board_height = 0
         self.board_width = 0
         self.mouse_x = 0
@@ -61,7 +62,9 @@ class Memory_Game:
         #self.Choose_Difficulty()
         
         self.get_random_board()
+        self.revealed = self.get_revealed(False)
         
+        self.start_animation()
         
     
     def get_random_board(self):
@@ -83,5 +86,28 @@ class Memory_Game:
                 temp_images = temp_images[1:]
             self.main_board.append(temp_col)
         
+    def get_revealed(self, revealed_value: bool):
+        temp = []
+        for i in range(self.board_width):
+            temp.append([revealed_value] * self.board_height)
+        return temp
+    
+    def start_animation(self):
+        #this function will reveal the boxes at the
+        #beginning of the game for a short time
+        temp_covered_boxes = self.get_revealed()
+        temp_boxes = []
+        for x in range(self.board_width):
+            for y in range(self.board_height):
+                temp_boxes.append((x,y))
+        random.shuffle(temp_boxes)
+        temp_box_groups = self.split_board_into_groups(8, temp_boxes)
+    
+    def split_board_into_groups(self, group_size, containers):
+        temp = []
+        for i in range(0, len(containers), group_size):
+            temp.append(containers[i: i + group_size])
+        return temp
+            
         
         
